@@ -1,0 +1,55 @@
+[
+  {
+    "id": "sitelink",
+    "type": "inputstring",
+    "name": "Site Link",
+    "value": "https://yggtorrent.com/"
+  },
+  {
+    "id": "cookieheader",
+    "type": "hiddendata",
+    "name": "CookieHeader",
+    "value": "ygg_=951moc9k962sh6h1gdtica7cupvlov7r"
+  },
+  {
+    "id": "lasterror",
+    "type": "hiddendata",
+    "name": "LastError",
+    "value": null
+  },
+  {
+    "id": "username",
+    "type": "inputstring",
+    "name": "Username",
+    "value": "JOHN"
+  },
+  {
+    "id": "password",
+    "type": "inputstring",
+    "name": "Password",
+    "value": "DOE"
+  },
+  {
+    "id": "catégorie",
+    "type": "inputselect",
+    "name": "Catégorie",
+    "value": "all",
+    "options": {
+      "all": "Tous",
+      "2145": "Film/Vidéo",
+      "2139": "Audio",
+      "2144": "Application",
+      "2142": "Jeu vidéo",
+      "2140": "eBook",
+      "2141": "Emulation",
+      "2143": "GPS",
+      "2188": "XXX"
+    }
+  },
+  {
+    "id": "trytonormalizereleasesnamesbymovingyearafterthetitle",
+    "type": "inputbool",
+    "name": "Try to normalize releases names by moving year after the title",
+    "value": false
+  }
+]

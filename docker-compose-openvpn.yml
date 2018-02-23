@@ -1,0 +1,53 @@
+version: '3'
+services:
+  openvpn:
+    image: ekristen/openvpn-client
+    container_name: openvpn
+    devices:
+      - /dev/net/tun
+    volumes:
+      - ./openvpn:/vpn
+    cap_add:
+      - NET_ADMIN
+    command:
+      - "/vpn/client.conf"
+
+  # RTORRENT
+  rutorrent:
+    depends_on:
+      - openvpn
+    network_mode: "service:openvpn"
+
+  # MON IP UNDER OPENVPN
+  # FOR TEST
+  # docker-compose -f docker-compose.yml -f docker-compose-openvpn.yml run myip-vpn
+  myip-vpn:
+    image: webdevops/php-nginx:alpine-php7
+    container_name: myip-vpn-${USER}
+    volumes:
+      - ./monip:/app/
+    entrypoint:
+      - 'php'
+    command:
+      - '/app/index.php'
+    depends_on:
+      - openvpn
+    network_mode: service:openvpn
+
+  # MON IP
+  # FOR TEST
+  # docker-compose -f docker-compose.yml -f docker-compose-openvpn.yml run  myip-novpn
+  myip-novpn:
+    image: webdevops/php-nginx:alpine-php7
+    container_name: myip-novpn-${USER}
+    volumes:
+      - ./monip:/app/
+    entrypoint:
+      - 'php'
+    command:
+      - '/app/index.php'
+
+  # FOR COMPLETE TEST
+  # IP_VPN=`docker-compose -f docker-compose.yml -f docker-compose-openvpn.yml run myip-vpn`
+  # IP_NOVPN=`docker-compose -f docker-compose.yml -f docker-compose-openvpn.yml run myip-novpn`
+  # echo $IP_VPN / $IP_NOVPN

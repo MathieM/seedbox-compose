@@ -1,0 +1,45 @@
+version: '3'
+services:
+  # WEB INTERFACE FOR MANAGE HOME THEATRE PC SYSTEM
+  htpcmanager:
+    env_file:
+      - custom_vhost.env
+    environement:
+      VIRTUAL_HOST: ${HTPCMANAGER_VHOST}
+
+  # RTORRENT IS WEB INTERFACE FOR DOWNLOAD TORRENT
+  rutorrent:
+    env_file:
+      - custom_vhost.env
+    environement:
+      VIRTUAL_HOST: ${RUTORRENT_VHOST}
+
+  # SUITARR IS ONE DOCKER IMAGE THAT CAN RUN RADARR, SONARR, LIDARR, JACKETT, NZBHYDRA, NZBHYDRA2 AND NZBGE
+  # RADARR IS AN INDEPENDENT FORK OF SONARR REWORKED FOR AUTOMATICALLY DOWNLOADING MOVIES VIA USENET AND BITTORRENT.
+  radarr:
+    env_file:
+      - custom_vhost.env
+    environement:
+      VIRTUAL_HOST: ${RADARR_VHOST}
+
+  # SONARR IS AN INDEPENDENT FORK OF SONARR REWORKED FOR AUTOMATICALLY DOWNLOADING MOVIES VIA USENET AND BITTORRENT.
+  sonarr:
+    env_file:
+      - custom_vhost.env
+    environement:
+      VIRTUAL_HOST: ${SONARR_VHOST}
+
+  # JACKETT IS BITTORRENT AGGREGATE SEARCH TOOL
+  jackett:
+    env_file:
+      - custom_vhost.env
+    environement:
+      VIRTUAL_HOST: ${JACKETT_VHOST}
+
+
+  # DOWNLOAD MOVIES AUTOMATICALLY
+  couchpotato:
+    env_file:
+      - custom_vhost.env
+    environement:
+      VIRTUAL_HOST: ${COUCHPOTATO_VHOST}

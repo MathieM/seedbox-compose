@@ -1,0 +1,121 @@
+version: '3'
+services:
+  nginx:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy-${USER}
+    restart: always
+    ports:
+        - ${NGINX_PORT_80}:80
+        - ${NGINX_PORT_443}:443
+    volumes:
+        - /var/run/docker.sock:/tmp/docker.sock:ro
+        - ${BASE_PATH}/${CONFIG_PATH}/nginx/config:/etc/nginx/conf.d
+
+  # WEB INTERFACE FOR MANAGE HOME THEATRE PC SYSTEM
+  htpcmanager:
+    restart: unless-stopped
+    image: linuxserver/htpcmanager
+    container_name: htpcmanager-${USER}
+    depends_on:
+      - nginx
+    environment:
+      - PGID=${GID}
+      - PUID=${UID}
+      - TZ=${TIMEZONE}
+      - VIRTUAL_HOST=htpcmanager.${DOMAIN_NAME}
+      - VIRTUAL_PORT=8085
+    volumes:
+      - ${BASE_PATH}/${CONFIG_PATH}/htpcmanager/config:/config:rw
+      - ${BASE_PATH}/${DOWNLOAD_PATH}:/downloads
+
+  # RTORRENT IS WEB INTERFACE FOR DOWNLOAD TORRENT
+  rutorrent:
+    restart: unless-stopped
+    image: diameter/rtorrent-rutorrent
+    container_name: rutorrent-${USER}
+    depends_on:
+      - nginx
+    environment:
+      - USR_ID=${UID}
+      - GRP_ID=${GID}
+      - PHP_MEM=1024M
+      - VIRTUAL_HOST=rutorrent.${DOMAIN_NAME}
+      - VIRTUAL_PORT=80
+    volumes:
+      - ${BASE_PATH}/${DOWNLOAD_PATH}:/downloads
+
+  # SUITARR IS ONE DOCKER IMAGE THAT CAN RUN RADARR, SONARR, LIDARR, JACKETT, NZBHYDRA, NZBHYDRA2 AND NZBGE
+  # RADARR IS AN INDEPENDENT FORK OF SONARR REWORKED FOR AUTOMATICALLY DOWNLOADING MOVIES VIA USENET AND BITTORRENT.
+  radarr:
+    restart: unless-stopped
+    image: hotio/suitarr
+    container_name: radarr-${USER}
+    expose:
+      - "7878"
+    depends_on:
+      - nginx
+    environment:
+      - APP=radarr
+      - PUID=${UID}
+      - PGID=${GID}
+      - VIRTUAL_HOST=radarr.${DOMAIN_NAME}
+      - VIRTUAL_PORT=7878
+    volumes:
+      - ${BASE_PATH}/${CONFIG_PATH}/radarr/config:/config
+      - ${BASE_PATH}/${DOWNLOAD_PATH}:/downloads
+
+  # SONARR IS AN INDEPENDENT FORK OF SONARR REWORKED FOR AUTOMATICALLY DOWNLOADING MOVIES VIA USENET AND BITTORRENT.
+  sonarr:
+    restart: unless-stopped
+    image: hotio/suitarr
+    container_name: sonarr-${USER}
+    expose:
+      - "8989"
+    depends_on:
+      - nginx
+    environment:
+      - APP=sonarr
+      - PUID=${UID}
+      - PGID=${GID}
+      - VIRTUAL_HOST=sonarr.${DOMAIN_NAME}
+      - VIRTUAL_PORT=8989
+    volumes:
+      - ${BASE_PATH}/${CONFIG_PATH}/sonarr/config:/config
+      - ${BASE_PATH}/${DOWNLOAD_PATH}:/downloads
+
+  # JACKETT IS BITTORRENT AGGREGATE SEARCH TOOL
+  jackett:
+    restart: unless-stopped
+    image : hotio/suitarr
+    container_name: jackett-${USER}
+    expose:
+      - "9117"
+    depends_on:
+      - nginx
+    environment:
+      - APP=jackett
+      - PGID=${UID}
+      - PUID=${GID}
+      - VIRTUAL_HOST=jackett.${DOMAIN_NAME}
+      - VIRTUAL_PORT=9117
+    volumes:
+      - ${BASE_PATH}/${CONFIG_PATH}/jackett/config:/config:rw
+      - ${BASE_PATH}/${DOWNLOAD_PATH}:/downloads:rw
+
+
+  # DOWNLOAD MOVIES AUTOMATICALLY
+  couchpotato:
+    restart: unless-stopped
+    image: linuxserver/couchpotato
+    container_name: couchpotato-${USER}
+    depends_on:
+      - nginx
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+      - VIRTUAL_HOST=couchpotato.${DOMAIN_NAME}
+      - VIRTUAL_PORT=5050
+    volumes:
+      - ${BASE_PATH}/${CONFIG_PATH}/couchpotato/config:/config
+      - ${BASE_PATH}/${DOWNLOAD_PATH}:/downloads

@@ -1,0 +1,47 @@
+version: '3'
+services:
+  # WEB INTERFACE FOR MANAGE HOME THEATRE PC SYSTEM
+  htpcmanager:
+    env_file:
+      - exposed_ports.env
+    ports:
+      - ${HTPCMANAGER_PORT_8085}:8085
+
+  # RTORRENT IS WEB INTERFACE FOR DOWNLOAD TORRENT
+  rutorrent:
+    env_file:
+      - exposed_ports.env
+    ports:
+      - ${RTORRENT_PORT_49160}::49160/udp
+      - ${RTORRENT_PORT_49161}::49161
+      - ${RTORRENT_PORT_80}:80
+
+  # SUITARR IS ONE DOCKER IMAGE THAT CAN RUN RADARR, SONARR, LIDARR, JACKETT, NZBHYDRA, NZBHYDRA2 AND NZBGE
+  # RADARR IS AN INDEPENDENT FORK OF SONARR REWORKED FOR AUTOMATICALLY DOWNLOADING MOVIES VIA USENET AND BITTORRENT.
+  radarr:
+    env_file:
+      - exposed_ports.env
+    ports:
+      - ${RADARR_PORT_7878}:7878
+
+  # SONARR IS AN INDEPENDENT FORK OF SONARR REWORKED FOR AUTOMATICALLY DOWNLOADING MOVIES VIA USENET AND BITTORRENT.
+  sonarr:
+    env_file:
+      - exposed_ports.env
+    ports:
+      - ${SONARR_PORT_8989}:8989
+
+  # JACKETT IS BITTORRENT AGGREGATE SEARCH TOOL
+  jackett:
+    env_file:
+      - exposed_ports.env
+    ports:
+      - ${JACKETT_PORT_9117}:9117
+
+
+  # DOWNLOAD MOVIES AUTOMATICALLY
+  couchpotato:
+    env_file:
+      - exposed_ports.env
+    ports:
+      - ${COUCHPOTATO_PORT_5050}:5050
