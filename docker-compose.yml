@@ -48,7 +48,7 @@ services:
   # RADARR IS AN INDEPENDENT FORK OF SONARR REWORKED FOR AUTOMATICALLY DOWNLOADING MOVIES VIA USENET AND BITTORRENT.
   radarr:
     restart: unless-stopped
-    image: hotio/suitarr
+    image: hotio/radarr
     container_name: radarr-${USER}
     expose:
       - "7878"
@@ -67,7 +67,7 @@ services:
   # SONARR IS AN INDEPENDENT FORK OF SONARR REWORKED FOR AUTOMATICALLY DOWNLOADING MOVIES VIA USENET AND BITTORRENT.
   sonarr:
     restart: unless-stopped
-    image: hotio/suitarr
+    image: hotio/sonarr
     container_name: sonarr-${USER}
     expose:
       - "8989"
@@ -86,7 +86,7 @@ services:
   # JACKETT IS BITTORRENT AGGREGATE SEARCH TOOL
   jackett:
     restart: unless-stopped
-    image : hotio/suitarr
+    image : hotio/jackett
     container_name: jackett-${USER}
     expose:
       - "9117"
