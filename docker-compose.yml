@@ -119,3 +119,34 @@ services:
     volumes:
       - ${BASE_PATH}/${CONFIG_PATH}/couchpotato/config:/config
       - ${BASE_PATH}/${DOWNLOAD_PATH}:/downloads
+
+  # PLEX MEDIA SERVER
+  plex:
+    container_name: plex-${USER}
+    image: plexinc/pms-docker
+    restart: unless-stopped
+    depends_on:
+      - nginx
+    ports:
+      - 32400:32400/tcp
+      - 3005:3005/tcp
+      - 8324:8324/tcp
+      - 32469:32469/tcp
+      - 1900:1900/udp
+      - 32410:32410/udp
+      - 32412:32412/udp
+      - 32413:32413/udp
+      - 32414:32414/udp
+    environment:
+      - TZ=${TIMEZONE}
+      - PLEX_CLAIM=${PLEX_CLAIM}
+      - PLEX_UID=${UID}
+      - PLEX_GID=${GID}
+      - VIRTUAL_HOST=plex.${DOMAIN_NAME}
+      - VIRTUAL_PORT=32400
+        #- ADVERTISE_IP=http://<hostIPAddress>:32400/
+    volumes:
+      - ${BASE_PATH}/${CONFIG_PATH}/plex/config:/config
+      - ${BASE_PATH}/${CONFIG_PATH}/plex/transcode:/transcode
+      - ${BASE_PATH}/${DOWNLOAD_PATH}:/downloads
+      - ${BASE_PATH}/${CONFIG_PATH}/plex/data:/data
